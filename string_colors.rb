@@ -20,9 +20,6 @@ module StringColors
   end
 
   def print_colored_numbers(number_array)
-    number_array.each do |number|
-      print code_colors(number), ' '
-    end
-    puts ''
+    number_array.map { |number| code_colors(number.to_s) }.join(' ')
   end
 end
