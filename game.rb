@@ -9,6 +9,8 @@ class Game
   def play
     puts instructions
     check_choice = maker_or_breaker?
+    breaker_logic if check_choice == 'breaker'
+    maker_logic if check_choice == 'maker'
   end
 
   def maker_or_breaker?
