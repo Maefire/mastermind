@@ -8,11 +8,14 @@ class Breaker
 
   attr_reader :choices
 
-  @choices = %w[1 2 3 4 5 6]
+  def initialize
+    @choices = %w[1 2 3 4 5 6]
+  end
 
   # this creates a random password of 4 numbers
   def generated_password
-    @password = @@choices.repeated_permutation(4).to_a.sample
+    @password = @choices.repeated_permutation(4).to_a.sample
+    p @password
   end
 
   def guess_password
