@@ -19,7 +19,7 @@ module StringColors
     }[hint]
   end
 
-  def print_colored_numbers(number_array)
+  def colored_numbers(number_array)
     number_array.map { |number| code_colors(number.to_s) }.join(' ')
   end
 end

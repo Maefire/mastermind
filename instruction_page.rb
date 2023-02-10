@@ -12,7 +12,7 @@ module InstructionPage
         colored numbers.
 
         These are the provided colored numbers to choose from:
-        #{print_colored_numbers([1, 2, 3, 4, 5, 6])}
+        #{colored_numbers([1, 2, 3, 4, 5, 6])}
 
 
         Alongside the numbers, you will have hints to guide you on your way to victory.
@@ -27,7 +27,7 @@ module InstructionPage
         see at least one #{hint_colors('?')}
 
         An example round might look like this:
-        (Hidden password: #{print_colored_numbers([6, 4, 3, 1])})
+        (Hidden password: #{colored_numbers([6, 4, 3, 1])})
 
         \e[4mRound 1\e[0m
 
