@@ -37,6 +37,7 @@ class Breaker
     @user_guess = gets.chomp.delete('^1-6').split('')
     if @user_guess.length == 4
       # run the comparison method here
+      password_compare(@password, @user_guess)
     else
       puts 'Error! Only enter four numbers between 1-6!'
     end
