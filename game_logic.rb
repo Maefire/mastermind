@@ -1,42 +1,39 @@
-# maker and breaker information here?
-# steps in game:
-#      ask maker to create password (We could get away with never printing this to screen)
-#      ask breaker for password guess
-#      check for matches
-#      display current guess | display current hints
-#      If guess is exact match, return the win condition
 require './string_colors'
 
+# this module is used to check password against guesses, then print the guess and
+# hint out for the player feedback
 module GameLogic
   include StringColors
 
-  def password_solved?
-    # end game if solved
-    # if hint for right position hits 4, and no wrong position, game win
-  end
-
   def password_compare(password, guess)
-    # both password and guess are an array of strings
     temp_password = password.clone
     temp_guess = guess.clone
     unconverted_hint = hint_checking(temp_password, temp_guess)
-    hint = convert_hint(unconverted_hint)
-    print "#{colored_numbers(temp_guess)}    hint:#{hint}"
+    print "#{colored_numbers(guess)}    hint:#{convert_hint(unconverted_hint)}\n\n"
   end
 
   def hint_checking(password, guess)
     hint = []
-    guess.each_with_index do |element, index|
-      if password[index] == element
-        hint << '!'
-      elsif password.include?(element)
-        hint << '?'
-      end
+    password.each_with_index do |element, index|
+      next unless guess[index] == element
+
+      hint << '!'
+      password[index] = 'match'
+      guess[index] = 'match'
+    end
+
+    guess.each_index do |index|
+      next unless guess[index] != 'match' && password.include?(guess[index])
+
+      hint << '?'
+      first_matching_index = password.find_index(guess[index])
+      password[first_matching_index] = 'partial'
+      guess[index] = 'partial'
     end
     hint
   end
 
-  def convert_hint(hint)
+  def convert_hint(_hint_array)
     hint_string = hint.map { |color| hint_colors(color) }
     hint_string.join
   end
