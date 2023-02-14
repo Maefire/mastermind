@@ -20,4 +20,4 @@ Traditionally, players can only earn points when playing as the codemaker. The c
 Other rules may be specified.
 
 # Project
-My goal is to recreate the original Mastermind game, as shown above, where you play versus the AI. I will be trying to make it so the AI uses the "Worst case: Five-guess algorithm". I will attempt to purposefully have it guess wrong from time to time, so that the player can win as the Code Maker. As the Code Breaker, the player will have 12 rounds to guess the password, using logical deduction. 
+My goal is to recreate the original Mastermind game, as shown above, where you play versus the AI. I will be trying to make it so the AI uses the "Worst case: Five-guess algorithm". I will attempt to purposefully have it guess wrong from time to time, so that the player can win as the Code Maker. As the Code Breaker, the player will have 12 rounds to guess the password, using logical deduction. Programming wise, I want to practice a more in depth "separation of concerns", so that my game is split into more readable bits of logic.
