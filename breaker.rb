@@ -19,9 +19,9 @@ class Breaker
     # guess_password
     # check password and print message using the correct method (guess_password runs check itself)
     # if round 13 (might be off by 1 here ), then break and return game over message
-    # if password solved, break and return win message. When checking. easy check: 
-            # if hint(!) is 4, win message.
-            # alternatively, check if each member of array matches
+    # if password solved, break and return win message. When checking. easy check:
+    # if hint(!) is 4, win message.
+    # alternatively, check if each member of array matches
     # round_counter += 1
     # end loop
   end
@@ -41,5 +41,30 @@ class Breaker
     else
       puts 'Error! Only enter four numbers between 1-6!'
     end
+  end
+
+  def password_solved?(password, guess)
+    return unless guess.eql?(password)
+
+    puts "\e[102mCongratulations! You cracked the password!\e[0m"
+    try_again?
+  end
+
+  def round_12?(_round_counter)
+    return unless @round_counter >= 13
+
+    puts "\e[91mHow unfortunate! The computer overlord won this time!\e[0m"
+    try_again?
+  end
+
+  def try_again?
+    puts 'New Game? Enter "Y" to continue, or any other key to quit.'
+    new_game = gets.chomp.downcase
+    if %w[y yes].include?(new_game)
+      Game.new.play
+    else
+      puts 'Thank you for playing!'
+    end
+    true
   end
 end
