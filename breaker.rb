@@ -13,17 +13,15 @@ class Breaker
   end
 
   def game_loop
-    # round_counter = 1
-    # generate_password
-    # start the game loop, which will run between round 1-12.
-    # guess_password
-    # check password and print message using the correct method (guess_password runs check itself)
-    # if round 13 (might be off by 1 here ), then break and return game over message
-    # if password solved, break and return win message. When checking. easy check:
-    # if hint(!) is 4, win message.
-    # alternatively, check if each member of array matches
-    # round_counter += 1
-    # end loop
+    @round_counter = 1
+    generate_password # delete da "p" nerd
+    loop do
+      puts "\e[1mRound: #{@round_counter}\e[0m"
+      guess_password
+      break if round_12?(@round_counter) || password_solved?(@password, @user_guess)
+
+      @round_counter += 1
+    end
   end
 
   # this creates a random password of 4 numbers
@@ -51,7 +49,7 @@ class Breaker
   end
 
   def round_12?(_round_counter)
-    return unless @round_counter >= 13
+    return unless @round_counter > 12
 
     puts "\e[91mHow unfortunate! The computer overlord won this time!\e[0m"
     try_again?
