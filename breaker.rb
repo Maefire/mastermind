@@ -51,7 +51,7 @@ class Breaker
   end
 
   def try_again?
-    puts 'New Game? Enter \"Y\" to continue, or any other key to quit.'
+    puts 'New Game? Enter "Y" to continue, or any other key to quit.'
     new_game = gets.chomp.downcase
     if %w[y yes].include?(new_game)
       Game.new.play
