@@ -37,4 +37,9 @@ module GameLogic
     hint_string = hint.map { |color| hint_colors(color) }
     hint_string.join
   end
+
+  # this creates a random password of 4 numbers
+  def generate_password
+    @password = @choices.repeated_permutation(4).to_a.sample
+  end
 end

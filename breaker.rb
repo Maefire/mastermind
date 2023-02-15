@@ -24,11 +24,6 @@ class Breaker
     end
   end
 
-  # this creates a random password of 4 numbers
-  def generate_password
-    @password = @choices.repeated_permutation(4).to_a.sample
-  end
-
   def guess_password
     puts 'Please enter four numbers between 1-6 for the password:'
     puts "\e[2m(Invalid characters are ignored.)\e[0m"
