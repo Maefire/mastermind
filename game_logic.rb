@@ -13,11 +13,11 @@ module GameLogic
   end
 
   def hint_checking(password, guess)
-    hint = []
+    @hint = []
     password.each_with_index do |element, index|
       next unless guess[index] == element
 
-      hint << '!'
+      @hint << '!'
       password[index] = 'match'
       guess[index] = 'match'
     end
@@ -25,21 +25,22 @@ module GameLogic
     guess.each_index do |index|
       next unless guess[index] != 'match' && password.include?(guess[index])
 
-      hint << '?'
+      @hint << '?'
       first_matching_index = password.find_index(guess[index])
       password[first_matching_index] = 'partial'
       guess[index] = 'partial'
     end
-    hint
+    @hint
   end
 
   def convert_hint(_hint_array)
-    hint_string = hint.map { |color| hint_colors(color) }
+    hint_string = @hint.map { |color| hint_colors(color) }
     hint_string.join
   end
 
   # this creates a random password of 4 numbers
   def generate_password
-    @password = @choices.repeated_permutation(4).to_a.sample
+    @all_combos ||= @choices.repeated_permutation(4).to_a
+    @password = @all_combos.sample
   end
 end
