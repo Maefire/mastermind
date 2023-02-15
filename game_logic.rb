@@ -12,7 +12,13 @@ module GameLogic
     print "#{colored_numbers(guess)}    hint:#{convert_hint(unconverted_hint)}\n\n"
   end
 
-  def hint_checking(password, guess)
+  def hint_checking(password,guess)
+    exact_checking(password,guess)
+    partial_checking(password,guess)
+    @hint
+  end
+
+  def exact_checking(password, guess)
     @hint = []
     password.each_with_index do |element, index|
       next unless guess[index] == element
@@ -21,7 +27,10 @@ module GameLogic
       password[index] = 'match'
       guess[index] = 'match'
     end
+    @hint
+  end
 
+  def partial_checking(password,guess)
     guess.each_index do |index|
       next unless guess[index] != 'match' && password.include?(guess[index])
 
