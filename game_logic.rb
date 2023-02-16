@@ -1,7 +1,7 @@
 require './string_colors'
 
 # this module is used to check password against guesses, then print the guess and
-    # hint out for the player feedback
+# hint out for the player feedback
 module GameLogic
   include StringColors
 
@@ -14,12 +14,12 @@ module GameLogic
   end
 
   def hint_count(array)
-    exact = array.count("!")
-    partial = array.count("?")
-    
-    total_match = [exact, partial]
+    exact = array.count('!')
+    partial = array.count('?')
+
+    [exact, partial]
   end
-  
+
   def hint_checking(password, guess)
     @hint = []
     password.each_with_index do |element, index|
