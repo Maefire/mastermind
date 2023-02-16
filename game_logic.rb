@@ -1,7 +1,7 @@
 require './string_colors'
 
 # this module is used to check password against guesses, then print the guess and
-# hint out for the player feedback
+    # hint out for the player feedback
 module GameLogic
   include StringColors
 
@@ -9,16 +9,18 @@ module GameLogic
     temp_password = password.clone
     temp_guess = guess.clone
     unconverted_hint = hint_checking(temp_password, temp_guess)
+    hint_count(unconverted_hint)
     print "#{colored_numbers(guess)}    hint:#{convert_hint(unconverted_hint)}\n\n"
   end
 
-  def hint_checking(password,guess)
-    exact_checking(password,guess)
-    partial_checking(password,guess)
-    @hint
+  def hint_count(array)
+    exact = array.count("!")
+    partial = array.count("?")
+    
+    total_match = [exact, partial]
   end
-
-  def exact_checking(password, guess)
+  
+  def hint_checking(password, guess)
     @hint = []
     password.each_with_index do |element, index|
       next unless guess[index] == element
@@ -27,10 +29,7 @@ module GameLogic
       password[index] = 'match'
       guess[index] = 'match'
     end
-    @hint
-  end
 
-  def partial_checking(password,guess)
     guess.each_index do |index|
       next unless guess[index] != 'match' && password.include?(guess[index])
 
@@ -45,11 +44,5 @@ module GameLogic
   def convert_hint(_hint_array)
     hint_string = @hint.map { |color| hint_colors(color) }
     hint_string.join
-  end
-
-  # this creates a random password of 4 numbers
-  def generate_password
-    @all_combos ||= @choices.repeated_permutation(4).to_a
-    @password = @all_combos.sample
   end
 end
