@@ -6,6 +6,8 @@ class Game
   include InstructionPage
   include StringColors
 
+  attr_reader :player
+
   def play
     puts instructions
     check_choice = maker_or_breaker?
@@ -31,10 +33,13 @@ class Game
   end
 
   def breaker_logic
-    # pull from logic file
+    game = Breaker.new
+    game.game_loop
   end
 
   def maker_logic
-    # pull from logic file
+    puts "\e[2mThis mode is currently unavailable. Choosing breaker, sorry!\e[0m"
+    game = Breaker.new
+    game.game_loop
   end
 end
