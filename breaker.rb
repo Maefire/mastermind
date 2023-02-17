@@ -6,12 +6,6 @@ class Breaker
   include StringColors
   include GameLogic
 
-  attr_reader :choices
-
-  def initialize
-    @choices = %w[1 2 3 4 5 6]
-  end
-
   def game_loop
     @round_counter = 1
     generate_password # delete da "p" nerd
@@ -26,7 +20,7 @@ class Breaker
 
   # this creates a random password of 4 numbers
   def generate_password
-    @password = @choices.repeated_permutation(4).to_a.sample
+    @password = CHOICES.repeated_permutation(4).to_a.sample
   end
 
   def guess_password

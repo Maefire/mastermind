@@ -5,6 +5,8 @@ require './string_colors'
 module GameLogic
   include StringColors
 
+  CHOICES = %w[1 2 3 4 5 6].freeze
+
   def password_compare(password, guess)
     temp_password = password.clone
     temp_guess = guess.clone
