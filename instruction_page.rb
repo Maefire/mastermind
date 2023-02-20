@@ -33,7 +33,7 @@ module InstructionPage
 
         you guessed:
 
-        #{print_colored_numbers([6, 3, 2, 5])}  #{hint_colors('!')}#{hint_colors('?')}
+        #{colored_numbers([6, 3, 2, 5])}  #{hint_colors('!')}#{hint_colors('?')}
 
         As you can see, the #{code_colors('6')} was in the right spot, which gave a #{hint_colors('!')} hint,
         while the #{code_colors('3')} was in the password, but in the wrong spot,
