@@ -7,19 +7,17 @@ module GameLogic
 
   CHOICES = %w[1 2 3 4 5 6].freeze
 
-  def password_compare(password, guess)
+  OPTIONS = %i[print no_print].freeze
+
+  def password_compare(password, guess, options: :print)
     temp_password = password.clone
     temp_guess = guess.clone
     unconverted_hint = hint_checking(temp_password, temp_guess)
-    hint_count(unconverted_hint)
-    print "#{colored_numbers(guess)}    hint:#{convert_hint(unconverted_hint)}\n\n"
-  end
+    if OPTIONS.index(options).zero?
+      print "#{colored_numbers(guess)}    hint:#{convert_hint(unconverted_hint)}\n\n"
+    end
 
-  def hint_count(array)
-    exact = array.count('!')
-    partial = array.count('?')
-
-    [exact, partial]
+    unconverted_hint
   end
 
   def hint_checking(password, guess)
@@ -46,5 +44,16 @@ module GameLogic
   def convert_hint(_hint_array)
     hint_string = @hint.map { |color| hint_colors(color) }
     hint_string.join
+  end
+
+  def try_again?
+    puts 'New Game? Enter "Y" to continue, or any other key to quit.'
+    new_game = gets.chomp.downcase
+    if %w[y yes].include?(new_game)
+      Game.new.play
+    else
+      puts 'Thank you for playing!'
+    end
+    true
   end
 end
