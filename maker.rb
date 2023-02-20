@@ -7,10 +7,12 @@ class Maker
   include StringColors
   include GameLogic
 
-  attr_reader :choices
+  attr_reader :user_password, :all_combo, :current_guess
 
   def initialize
-    @choices = %w[1 2 3 4 5 6]
+    @user_password = user_given_password
+    @all_combo = CHOICES.repeated_permutation(4)
+    @current_guess = generate_initial_guess
   end
 
   def game_loop
@@ -26,46 +28,44 @@ class Maker
   end
 
   # this creates a random password of 4 numbers
-  def get_user_password
+  def user_given_password
     puts 'Please enter four numbers between 1-6 for the password:'
     puts "\e[2m(Invalid characters are ignored.)\e[0m"
-    @user_password = gets.chomp.delete('^1-6').split('')
-    unless @user_password.length == 4
-      puts 'Error! Only enter four numbers between 1-6!'
-    end
+    input_password = gets.chomp.delete('^1-6').split('')
+    return puts 'Error! Only enter four numbers between 1-6!' unless input_password.length == 4
+
+    input_password
   end
 
-  def guess_password
-    # computer logic to guess password
-    # if you want multiple difficulties, you might want to make multiple versions of
-    # this, named appropriately, so it guesses passwords at different average totals
-    # consider forcing it to guess wrong on purpose for an "easy mode"
-    # The algorithm works as follows, with P = length of the solution used in the game,  
-    # x1 = exact matches ("!") and Y1 = near matches ("?"):
+  # computer logic to guess password
 
-    # Set i = 1
-    # Play fixed initial guess G1 (my first "test" guess for ai to try. [1, 1, 2, 2]?)
-    # Get the response X1 and Y1 password_compare(@user_password, @guess)
-    
-    # Repeat while Xi ≠ P: (start a loop. while "!"(i) != @user_password.length)
-    # i += 1
-    # Set Ei = ∅ and h = 1
-    # Initialize population
-    # Repeat while h ≤ maxgen and |Ei| ≤ maxsize:
-    # Generate new population using crossover, mutation, inversion and permutation
-    
-    # Calculate fitness (hint_checking is my fitness function,so password_compare)
-    # Add eligible combinations to Ei
-    # Increment h
-    # Play guess Gi which belongs to Ei
-    # Get response Xi and Yi
+  def generate_initial_guess
+    initial_guess = %w[1 1 2 2]
+    @current_guess = password_compare(@user_password, initial_guess, options: :no_print)
+  end
+
+  # need to add a check so it keeps the answer and the matches that equal %w(? ? ? ?)
+  def reduce_pop
+    @all_combo = @all_combo.select do |possibility|
+      hint = password_compare(@user_password, possibility, options: :no_print)
+      hint.eql?(@current_guess) || hint.eql?(%w[? ? ? ?]) || hint.eql?(%w[! ! ! !])
+    end
+
+    puts "Remaining combos: #{@all_combo}"
+  end
+
+  def next_guess
+    next_guess = @all_combo.sample
+    @current_guess = password_compare(@user_password, next_guess, options: :no_print)
+
+    puts "Current guess: #{@current_guess}"
   end
 
   # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#
   # vvvvv these all need to be refactored with the ai in mind vvvvv#
   # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#
   def password_solved?
-    return unless @user_guess.eql?(@password)
+    return unless @current_guess.eql?(@password)
 
     puts "\e[102mCongratulations! You cracked the password!\e[0m"
     try_again?
@@ -76,17 +76,6 @@ class Maker
 
     puts "\e[91mHow unfortunate! The computer overlord won this time!\e[0m"
     try_again?
-  end
-
-  def try_again?
-    puts 'New Game? Enter \"Y\" to continue, or any other key to quit.'
-    new_game = gets.chomp.downcase
-    if %w[y yes].include?(new_game)
-      Game.new.play
-    else
-      puts 'Thank you for playing!'
-    end
-    true
   end
   # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^#
   # ^^^^^ these all need to be refactored with the ai in mind ^^^^^#
