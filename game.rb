@@ -38,8 +38,7 @@ class Game
   end
 
   def maker_logic
-    puts "\e[2mThis mode is currently unavailable. Choosing breaker, sorry!\e[0m"
-    game = Breaker.new
+    game = Maker.new
     game.game_loop
   end
 end
