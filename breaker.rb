@@ -12,7 +12,7 @@ class Breaker
     loop do
       puts "\e[1mRound: #{@round_counter}\e[0m"
       guess_password
-      break if password_solved? || round_12?
+      break if password_solved?(options: :player_mode) || round_12?(options: :player_mode)
 
       @round_counter += 1
     end
@@ -34,20 +34,4 @@ class Breaker
       @round_counter -= 1
     end
   end
-
-  def password_solved?
-    return unless @user_guess.eql?(@password)
-
-    puts "\e[102mCongratulations! You cracked the password!\e[0m"
-    try_again?
-  end
-
-  def round_12?
-    return unless @round_counter >= 12
-
-    puts "\e[91mHow unfortunate! The computer overlord won this time!\e[0m"
-    puts "#{colored_numbers(@password)} was the password!\n\n"
-    try_again?
-  end
-
 end
