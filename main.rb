@@ -5,5 +5,4 @@ require_relative 'breaker'
 require_relative 'game_logic'
 require_relative 'maker'
 
-
 Game.new.play
