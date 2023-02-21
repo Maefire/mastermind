@@ -7,13 +7,13 @@ module GameLogic
 
   CHOICES = %w[1 2 3 4 5 6].freeze
 
-  OPTIONS = %i[print no_print].freeze
+  OPTIONS = %i[print no_print player_mode ai_mode].freeze
 
   def password_compare(password, guess, options: :print)
     temp_password = password.clone
     temp_guess = guess.clone
     unconverted_hint = hint_checking(temp_password, temp_guess)
-    if OPTIONS.index(options).zero?
+    if OPTIONS[0].eql?(options)
       print "#{colored_numbers(guess)}    hint:#{convert_hint(unconverted_hint)}\n\n"
     end
 
@@ -44,6 +44,33 @@ module GameLogic
   def convert_hint(_hint_array)
     hint_string = @hint.map { |color| hint_colors(color) }
     hint_string.join
+  end
+
+  def password_solved?(options: :player_mode)
+    if OPTIONS[-1].eql?(options)
+      return unless @current_hint.eql?(%w[! ! ! !])
+
+      puts "\e[102mThat AI needs a nerf, right? It guessed your password!\e[0m"
+    elsif OPTIONS[2].eql?(options)
+      return unless @user_guess.eql?(@password)
+
+      puts "\e[102mCongratulations! You cracked that try-hard AI's password!\e[0m"
+    end
+    try_again?
+  end
+
+  def round_12?(options: :player_mode)
+    if OPTIONS[-1].eql?(options)
+      return unless @round_counter >= 12
+
+      puts "\e[91mHow unfortunate...for the Skynet wannabe! You outsmarted the computer!\e[0m"
+    elsif OPTIONS[2].eql?(options)
+      return unless @round_counter >= 12
+
+      puts "\e[91mHow unfortunate! The computer overlord won this time!\e[0m"
+      puts "#{colored_numbers(@password)} was the password!\n\n"
+    end
+    try_again?
   end
 
   def try_again?
