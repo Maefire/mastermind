@@ -13,7 +13,7 @@ class Maker
     @user_password = user_given_password
     @all_combo = CHOICES.repeated_permutation(4).to_a
     @literal_guess = nil
-    @current_hint = []
+    @current_hint = nil
   end
 
   def game_loop
