@@ -7,22 +7,26 @@ class Maker
   include StringColors
   include GameLogic
 
-  attr_reader :user_password, :all_combo, :current_guess
+  attr_reader :user_password, :all_combo, :current_hint, :literal_guess
 
   def initialize
     @user_password = user_given_password
-    @all_combo = CHOICES.repeated_permutation(4)
-    @current_guess = generate_initial_guess
+    @all_combo = CHOICES.repeated_permutation(4).to_a
+    @literal_guess = nil
+    @current_hint = []
   end
 
   def game_loop
     @round_counter = 1
-    # generate_password
+    puts "\e[1mRound: #{@round_counter}\e[0m"
+    generate_guess
+    @round_counter += 1
     loop do
-      puts "\e[1mRound: #{@round_counter}\e[0m"
-      guess_password
-      break if password_solved? || round_12?
+      break if password_solved?(options: :ai_mode) || round_12?(options: :ai_mode)
 
+      reduce_pop
+      puts "\e[1mRound: #{@round_counter}\e[0m"
+      generate_guess
       @round_counter += 1
     end
   end
@@ -37,47 +41,20 @@ class Maker
     input_password
   end
 
-  # computer logic to guess password
-
-  def generate_initial_guess
-    initial_guess = %w[1 1 2 2]
-    @current_guess = password_compare(@user_password, initial_guess, options: :no_print)
+  # @all_combo.sample
+  def generate_guess
+    @literal_guess = @literal_guess.nil? ? %w[1 1 2 2] : @all_combo.first
+    @current_hint = password_compare(@user_password, @literal_guess, options: :print)
   end
 
-  # need to add a check so it keeps the answer and the matches that equal %w(? ? ? ?)
   def reduce_pop
     @all_combo = @all_combo.select do |possibility|
-      hint = password_compare(@user_password, possibility, options: :no_print)
-      hint.eql?(@current_guess) || hint.eql?(%w[? ? ? ?]) || hint.eql?(%w[! ! ! !])
+      hint = password_compare(@literal_guess, possibility, options: :no_print)
+      hint.eql?(@current_hint) || hint.eql?(%w[! ! ! !])
     end
-
-    puts "Remaining combos: #{@all_combo}"
+    @all_combo.delete(@literal_guess)
+    ## enable these to see more on what is happening when reduce pop runs ##
+    # puts "Remaining combos: #{@all_combo}"
+    # puts "size of array: #{@all_combo.size}"
   end
-
-  def next_guess
-    next_guess = @all_combo.sample
-    @current_guess = password_compare(@user_password, next_guess, options: :no_print)
-
-    puts "Current guess: #{@current_guess}"
-  end
-
-  # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#
-  # vvvvv these all need to be refactored with the ai in mind vvvvv#
-  # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#
-  def password_solved?
-    return unless @current_guess.eql?(@password)
-
-    puts "\e[102mCongratulations! You cracked the password!\e[0m"
-    try_again?
-  end
-
-  def round_12?
-    return unless @round_counter >= 12
-
-    puts "\e[91mHow unfortunate! The computer overlord won this time!\e[0m"
-    try_again?
-  end
-  # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^#
-  # ^^^^^ these all need to be refactored with the ai in mind ^^^^^#
-  # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^#
 end
