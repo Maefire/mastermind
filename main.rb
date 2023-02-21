@@ -3,6 +3,7 @@ require_relative 'instruction_page'
 require_relative 'game'
 require_relative 'breaker'
 require_relative 'game_logic'
-require_relative 'maker.rb'
+require_relative 'maker'
+
 
 Game.new.play
