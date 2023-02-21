@@ -36,9 +36,12 @@ class Maker
     puts 'Please enter four numbers between 1-6 for the password:'
     puts "\e[2m(Invalid characters are ignored.)\e[0m"
     input_password = gets.chomp.delete('^1-6').split('')
-    return puts 'Error! Only enter four numbers between 1-6!' unless input_password.length == 4
-
-    input_password
+    if input_password.length == 4
+      input_password
+    else
+      puts 'Error! Only enter four numbers between 1-6!'
+      user_given_password
+    end
   end
 
   # @all_combo.sample
